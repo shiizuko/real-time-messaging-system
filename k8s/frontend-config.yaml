@@ -1,0 +1,9 @@
+# k8s/frontend-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+data:
+  NODE_ENV: "production"
+  NEXT_PUBLIC_API_URL: "http://backend-service:8000"
+  NEXT_PUBLIC_WS_URL: "ws://backend-service:8000"

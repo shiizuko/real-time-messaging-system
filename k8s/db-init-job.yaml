@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-init
+spec:
+  template:
+    spec:
+      containers:
+      - name: db-init
+        image: postgres:15-alpine
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          # Espera o PostgreSQL estar pronto
+          until PGPASSWORD=postgrespass psql -h postgres-service -U postgres -d messagesdb -c '\q'; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          
+          # Executa as queries
+          PGPASSWORD=postgrespass psql -h postgres-service -U postgres -d messagesdb << EOF
+          CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR(255) UNIQUE NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          );
+          CREATE TABLE IF NOT EXISTS messages (
+            id SERIAL PRIMARY KEY,
+            sender_id INTEGER REFERENCES users(id),
+            receiver_id INTEGER REFERENCES users(id),
+            content TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          );
+          EOF
+        env:
+        - name: PGPASSWORD
+          value: postgrespass
+      restartPolicy: Never
