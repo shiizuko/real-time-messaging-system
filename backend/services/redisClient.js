@@ -17,7 +17,6 @@ async function initializeRedisClients() {
     try {
         generalClient = redis.createClient({
             url: process.env.REDIS_URL,
-            password: process.env.REDIS_PASSWORD,
             socket: {
                 reconnectStrategy: (retries) => {
                     if (retries > 10) {
