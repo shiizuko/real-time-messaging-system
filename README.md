@@ -1,6 +1,8 @@
 # Ager - Sistema de Mensagens em Tempo Real
-
 Sistema de mensagens em tempo real construído com Node.js, Next.js, PostgreSQL e Redis.
+
+https://github.com/user-attachments/assets/a1a91984-a34f-4849-80d6-3c8f04c4ea28
+
 
 ## Tecnologias
 
