@@ -2,7 +2,30 @@ const redis = require('redis');
 
 const DEFAULT_TTL = process.env.REDIS_TTL ? parseInt(process.env.REDIS_TTL) : 3600; 
 
-const generalClient = redis.createClient({ url: process.env.REDIS_URL });
+function createRedisClient(url, options = {}) {
+  const client = redis.createClient({
+    url,
+    retry_strategy: function(options) {
+      if (options.error && options.error.code === 'ECONNREFUSED') {
+        return new Error('O servidor Redis recusou a conexão');
+      }
+      if (options.total_retry_time > 1000 * 60 * 60) {
+        return new Error('Tempo de retry esgotado');
+      }
+      if (options.attempt > 10) {
+        return undefined; 
+      }
+      return Math.min(options.attempt * 100, 3000); // Backoff exponencial
+    },
+    ...options
+  });
+  
+  client.on('error', (err) => console.error('Redis Client Error', err));
+  
+  return client;
+}
+
+const generalClient = createRedisClient(process.env.REDIS_URL);
 const pubClient = generalClient.duplicate();
 const subClient = generalClient.duplicate(); 
 const persistClient = redis.createClient({ 

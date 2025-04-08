@@ -1,14 +1,36 @@
 const socketio = require('socket.io');
 const { subClient } = require('./redisClient');
+const jwt = require('jsonwebtoken');
 
 let io;
 const userSockets = new Map(); 
 
 const initSocket = (server) => {
-  io = socketio(server, { cors: { origin: '*' } });
+  io = socketio(server, { 
+    cors: { 
+      origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+      methods: ['GET', 'POST'] 
+    } 
+  });
   
+  io.use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    if (!token) {
+      return next(new Error('Authentication error'));
+    }
+    
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      socket.user = decoded;
+      next();
+    } catch (err) {
+      next(new Error('Authentication error'));
+    }
+  });
+
   io.on('connection', (socket) => {
     const userId = socket.handshake.auth.userId;
+    
     console.log('Usuário conectado:', userId);
     
     userSockets.set(userId, socket);

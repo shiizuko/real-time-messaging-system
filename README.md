@@ -44,6 +44,10 @@ docker-compose up --build
 ```bash
 docker-compose build
 ```
+2. Crie os secrets necessários:
+```bash
+kubectl apply -f k8s/backend-secrets.yaml
+```
 
 2. Aplique as configurações:
 ```bash
