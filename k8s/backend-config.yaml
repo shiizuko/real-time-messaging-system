@@ -7,4 +7,3 @@ data:
   PORT: "8000"
   DATABASE_URL: "postgres://postgres:postgrespass@postgres-service:5432/messagesdb"
   REDIS_URL: "redis://redis-access:6379"
-  JWT_SECRET: "seuSegredo"

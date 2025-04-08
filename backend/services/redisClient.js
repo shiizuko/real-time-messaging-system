@@ -5,6 +5,7 @@ const DEFAULT_TTL = process.env.REDIS_TTL ? parseInt(process.env.REDIS_TTL) : 36
 function createRedisClient(url, options = {}) {
   const client = redis.createClient({
     url,
+    password: process.env.REDIS_PASSWORD,
     retry_strategy: function(options) {
       if (options.error && options.error.code === 'ECONNREFUSED') {
         return new Error('O servidor Redis recusou a conexão');
@@ -30,6 +31,7 @@ const pubClient = generalClient.duplicate();
 const subClient = generalClient.duplicate(); 
 const persistClient = redis.createClient({ 
   url: process.env.REDIS_URL,
+  password: process.env.REDIS_PASSWORD,
   database: 1 
 });
 
