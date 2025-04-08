@@ -155,8 +155,8 @@ export default function Chat() {
               </div>
               {selectedContact && (
                 <TypingIndicator
-                  isTyping={typingUsers[selectedContact.id]}
-                  username={selectedContact.username}
+                  typingUsers={typingUsers}
+                  selectedContact={selectedContact}
                 />
               )}
               <form onSubmit={sendMessage} className="p-2 bg-[#DAE3E5]/50 mx-12 mb-6 rounded-md">

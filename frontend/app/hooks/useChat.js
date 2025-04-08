@@ -86,7 +86,7 @@ export function useChat() {
         isTyping,
         typingUsers,
         handleTypingEvent
-    } = useTyping(socketRef.current, selectedContact);
+    } = useTyping(socketRef, selectedContact);
 
 
     useEffect(() => {
@@ -158,7 +158,7 @@ export function useChat() {
         setSelectedContact,
         sendMessage,
         isTyping,
-    typingUsers,
-    handleTypingEvent,
+        typingUsers,
+        handleTypingEvent,
     };
 }
