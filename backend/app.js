@@ -10,7 +10,6 @@ const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
-// Configuração CORS mais permissiva para desenvolvimento
 app.use(cors({
     origin: [
       'http://localhost:3000',

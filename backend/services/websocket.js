@@ -10,7 +10,13 @@ const initSocket = (server) => {
     cors: { 
       origin: process.env.FRONTEND_URL || 'http://localhost:3000',
       methods: ['GET', 'POST'] 
-    } 
+    },
+    pingTimeout: 10000,
+    pingInterval: 5000,
+    connectTimeout: 15000,
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000
   });
   
   io.use((socket, next) => {
